@@ -57,6 +57,7 @@ class TDSBlock : public Container {
 
   std::vector<Variable> forward(const std::vector<Variable>& inputs) override;
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 } // namespace fl

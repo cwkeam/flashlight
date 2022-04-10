@@ -183,4 +183,18 @@ std::string Conv2D::prettyString() const {
   return ss.str();
 }
 
+std::string Conv2D::printWeights() const {
+  std::ostringstream ss;
+  ss << af::toString("weights", params_[0].array());
+  // if (bias_) {
+  //   ss << "bias";
+  //   ss << params_[1].array();
+  // } 
+  
+  return ss.str();
+}
+
+
 } // namespace fl
+
+

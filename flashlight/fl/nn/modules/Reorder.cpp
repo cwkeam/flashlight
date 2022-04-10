@@ -26,4 +26,10 @@ std::string Reorder::prettyString() const {
   return ss.str();
 }
 
+std::string Reorder::printWeights() const {
+  std::ostringstream ss;
+  ss << "Reorder WEIGHTS";
+  return ss.str();
+}
+
 } // namespace fl

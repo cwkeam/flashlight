@@ -302,6 +302,7 @@ class GatedLinearUnit : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**

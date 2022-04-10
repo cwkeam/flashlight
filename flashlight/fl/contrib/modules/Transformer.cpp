@@ -154,6 +154,13 @@ std::string Transformer::prettyString() const {
   return ss.str();
 }
 
+std::string Transformer::printWeights() const {
+  std::ostringstream ss;
+  ss << "Transformer WEIGHTS";
+  return ss.str();
+}
+
+
 Transformer::Transformer() {}
 
 } // namespace fl

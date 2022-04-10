@@ -138,4 +138,10 @@ std::string LayerNorm::prettyString() const {
   return ss.str();
 }
 
+std::string LayerNorm::printWeights() const {
+  std::ostringstream ss;
+  ss << "LayerNorm WEIGHTS";
+  return ss.str();
+}
+
 } // namespace fl

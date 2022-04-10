@@ -139,6 +139,10 @@ std::string GatedLinearUnit::prettyString() const {
   return "GatedLinearUnit (" + std::to_string(dim_) + ")";
 }
 
+std::string GatedLinearUnit::printWeights() const {
+  return "GatedLinearUnit WEIGHTS";
+}
+
 LogSoftmax::LogSoftmax(int dim /* = 0 */) : dim_(dim) {}
 
 Variable LogSoftmax::forward(const Variable& input) {

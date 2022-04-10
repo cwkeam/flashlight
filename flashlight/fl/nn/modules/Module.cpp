@@ -69,6 +69,19 @@ std::vector<Variable> Module::operator()(const std::vector<Variable>& input) {
   return this->forward(input);
 }
 
+std::string Module::printWeights() const {
+  std::ostringstream ss;
+  ss << "WEIGHTS";
+  // ss << af::toString("weights", params_[0].array());
+  // if (bias_) {
+  //   ss << "bias";
+  //   ss << params_[1].array();
+  // } 
+  
+  return ss.str();
+}
+
+
 UnaryModule::UnaryModule() = default;
 
 UnaryModule::UnaryModule(const std::vector<Variable>& params)
@@ -104,5 +117,10 @@ Variable BinaryModule::operator()(
     const Variable& input2) {
   return this->forward(input1, input2);
 }
+
+
+
+
+
 
 } // namespace fl

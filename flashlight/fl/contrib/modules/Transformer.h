@@ -60,6 +60,7 @@ class Transformer : public Container {
 
   std::vector<Variable> forward(const std::vector<Variable>& input) override;
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   int32_t nHeads_;

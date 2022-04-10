@@ -90,4 +90,11 @@ std::string TDSBlock::prettyString() const {
   return ss.str();
 }
 
+std::string TDSBlock::printWeights() const {
+  std::ostringstream ss;
+
+  ss << "Time-Depth Separable Block WEIGHTS";
+  return ss.str();
+}
+
 } // namespace fl

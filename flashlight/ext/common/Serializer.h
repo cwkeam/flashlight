@@ -12,6 +12,8 @@
 
 #include "flashlight/fl/flashlight.h"
 #include "flashlight/lib/common/System.h"
+#include <cereal/archives/json.hpp>
+#include <cereal/types/vector.hpp>
 
 namespace fl {
 namespace ext {
@@ -28,6 +30,21 @@ struct Serializer {
         2.0,
         6,
         saveImpl<Args...>,
+        filepath,
+        version,
+        args...); // max wait 31s
+  }
+  
+  template <class... Args>
+  static void saveJSON(
+      const std::string& filepath,
+      const std::string& version,
+      const Args&... args) {
+    lib::retryWithBackoff(
+        std::chrono::seconds(1),
+        2.0,
+        6,
+        saveImplJSON<Args...>,
         filepath,
         version,
         args...); // max wait 31s
@@ -59,6 +76,27 @@ struct Serializer {
       cereal::BinaryOutputArchive ar(file);
       ar(version);
       ar(args...);
+    } catch (const std::exception& ex) {
+      FL_LOG(fl::ERROR) << "Error while saving \"" << filepath
+                        << "\": " << ex.what() << "\n";
+      throw;
+    }
+  }
+
+  template <typename... Args>
+  static void saveImplJSON(
+      const std::string& filepath,
+      const std::string& version,
+      const Args&... args) {
+    try {
+      std::ofstream file(filepath, std::ios::out);
+      if (!file.is_open()) {
+        throw std::runtime_error(
+            "failed to open file for writing: " + filepath);
+      }
+      cereal::JSONOutputArchive archive(file);
+      archive(version);
+      archive(args...);
     } catch (const std::exception& ex) {
       FL_LOG(fl::ERROR) << "Error while saving \"" << filepath
                         << "\": " << ex.what() << "\n";

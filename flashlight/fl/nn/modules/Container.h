@@ -123,6 +123,7 @@ class Container : public Module {
    * @return a string containing the module label
    */
   virtual std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**
@@ -173,6 +174,7 @@ class Sequential : public Container {
    * @return a string containing the module label
    */
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(Container)

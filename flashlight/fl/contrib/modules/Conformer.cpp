@@ -208,4 +208,11 @@ std::string Conformer::prettyString() const {
   return ss.str();
 }
 
+std::string Conformer::printWeights() const {
+  std::ostringstream ss;
+  ss << "Conformer WEIGHTS";
+  return ss.str();
+}
+
+
 } // namespace fl

@@ -136,6 +136,7 @@ class Module {
    * @return a string containing the module label
    */
   virtual std::string prettyString() const = 0;
+  std::string printWeights() const;
 
   virtual ~Module() = default;
 };

@@ -80,6 +80,12 @@ std::string Container::prettyString() const {
   return ss.str();
 }
 
+std::string Container::printWeights() const {
+  std::ostringstream ss;
+  ss << "Container WEIGHTS";
+  return ss.str();
+}
+
 Sequential::Sequential() = default;
 
 std::vector<Variable> Sequential::forward(const std::vector<Variable>& input) {
@@ -118,5 +124,20 @@ std::string Sequential::prettyString() const {
   }
   return ss.str();
 }
+
+std::string Sequential::printWeights() const {
+  std::ostringstream ss;
+  ss << "Sequential Weights";
+  ss << " [input";
+  for (int i = 0; i < modules_.size(); ++i) {
+    ss << " -> (" << i << ")";
+  }
+  // ss << " -> output]";
+  // for (int i = 0; i < modules_.size(); ++i) {
+  //   ss << "\n\t(" << i << "): " << modules_[i]->printWeights();
+  // }
+  return ss.str();
+}
+
 
 } // namespace fl

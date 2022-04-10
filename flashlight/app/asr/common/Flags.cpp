@@ -423,6 +423,11 @@ DEFINE_string(
     am,
     "",
     "path/to/acoustic_model, used also to continue and fork training");
+DEFINE_string(
+    jsonout,
+    "",
+    "path/to/acoustic_model, used also to continue and fork training");
+
 DEFINE_string(sclite, "", "[decode] path/to/sclite to be written");
 DEFINE_string(
     decodertype,

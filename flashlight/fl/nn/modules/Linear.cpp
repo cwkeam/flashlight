@@ -72,4 +72,10 @@ std::string Linear::prettyString() const {
   return ss.str();
 }
 
+std::string Linear::printWeights() const {
+  std::ostringstream ss;
+  ss << "Linear WEIGHTS";
+  return ss.str();
+}
+
 } // namespace fl

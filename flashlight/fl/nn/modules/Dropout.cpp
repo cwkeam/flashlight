@@ -33,5 +33,8 @@ Variable Dropout::forward(const Variable& input) {
 std::string Dropout::prettyString() const {
   return ("Dropout (" + std::to_string(ratio_) + ")");
 }
+std::string Dropout::printWeights() const {
+  return "DROPOUT WEIGHTS";
+}
 
 } // namespace fl

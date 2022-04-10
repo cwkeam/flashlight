@@ -80,6 +80,10 @@ int main(int argc, char** argv) {
     (void)fl::ext::ModulePlugin(FLAGS_arch);
   }
   Serializer::load(FLAGS_am, version, cfg, network, criterion);
+  Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->printWeights(), criterion);
+
+  // cereal::JSONOutputArchive archive( std::cout );
+
   if (version != FL_APP_ASR_VERSION) {
     LOG(WARNING) << "[Network] Model version " << version
                  << " and code version " << FL_APP_ASR_VERSION;
@@ -87,6 +91,7 @@ int main(int argc, char** argv) {
   network->eval();
   criterion->eval();
 
+  LOG(INFO) << "WEIGHTS" << network->printWeights();
   LOG(INFO) << "[Network] " << network->prettyString();
   LOG(INFO) << "[Criterion] " << criterion->prettyString();
   LOG(INFO) << "[Network] Number of params: " << numTotalParams(network);
