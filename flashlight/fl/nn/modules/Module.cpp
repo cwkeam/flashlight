@@ -71,13 +71,12 @@ std::vector<Variable> Module::operator()(const std::vector<Variable>& input) {
 
 std::string Module::printWeights() const {
   std::ostringstream ss;
-  ss << "WEIGHTS";
-  // ss << af::toString("weights", params_[0].array());
-  // if (bias_) {
-  //   ss << "bias";
-  //   ss << params_[1].array();
-  // } 
-  
+  ss << "!!MODULE_WEIGHTS";
+
+  // for (int i = 0; i < params_.size(); ++i) {
+  //   ss << af::toString("weights", params_[i].array());
+  // }
+  ss << this->printWeights();  
   return ss.str();
 }
 

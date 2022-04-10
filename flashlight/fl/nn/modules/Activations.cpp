@@ -31,6 +31,10 @@ std::string Sigmoid::prettyString() const {
   return "Sigmoid";
 }
 
+std::string Sigmoid::printWeights() const {
+  return "(No Weights) Sigmoid";
+}
+
 Log::Log() = default;
 
 Variable Log::forward(const Variable& input) {
@@ -39,6 +43,10 @@ Variable Log::forward(const Variable& input) {
 
 std::string Log::prettyString() const {
   return "Log";
+}
+
+std::string Log::printWeights() const {
+  return "(No Weights) Log";
 }
 
 Tanh::Tanh() = default;
@@ -51,6 +59,10 @@ std::string Tanh::prettyString() const {
   return "Tanh";
 }
 
+std::string Tanh::printWeights() const {
+  return "(No Weights) Tanh";
+}
+
 HardTanh::HardTanh() = default;
 
 Variable HardTanh::forward(const Variable& input) {
@@ -59,6 +71,10 @@ Variable HardTanh::forward(const Variable& input) {
 
 std::string HardTanh::prettyString() const {
   return "HardTanh";
+}
+
+std::string HardTanh::printWeights() const {
+  return "(No Weights) HardTanh";
 }
 
 ReLU::ReLU() = default;
@@ -71,6 +87,10 @@ std::string ReLU::prettyString() const {
   return "ReLU";
 }
 
+std::string ReLU::printWeights() const {
+  return "(No Weights) ReLU";
+}
+
 ReLU6::ReLU6() = default;
 
 Variable ReLU6::forward(const Variable& input) {
@@ -79,6 +99,10 @@ Variable ReLU6::forward(const Variable& input) {
 
 std::string ReLU6::prettyString() const {
   return "ReLU6";
+}
+
+std::string ReLU6::printWeights() const {
+  return "(No Weights) ReLU6";
 }
 
 LeakyReLU::LeakyReLU(double slope) : mSlope_(slope) {}
@@ -90,6 +114,11 @@ Variable LeakyReLU::forward(const Variable& input) {
 std::string LeakyReLU::prettyString() const {
   return "LeakyReLU (" + std::to_string(mSlope_) + ")";
 }
+
+std::string LeakyReLU::printWeights() const {
+  return "(No Weights) LeakyReLU (" + std::to_string(mSlope_) + ")";
+}
+
 
 PReLU::PReLU(const Variable& w) : UnaryModule({w}) {}
 
@@ -107,6 +136,11 @@ std::string PReLU::prettyString() const {
   return "PReLU";
 }
 
+std::string PReLU::printWeights() const {
+  return "(No Weights) PReLU";
+}
+
+
 ELU::ELU(double alpha) : mAlpha_(alpha) {}
 
 Variable ELU::forward(const Variable& input) {
@@ -116,6 +150,11 @@ Variable ELU::forward(const Variable& input) {
 
 std::string ELU::prettyString() const {
   return "ELU (" + std::to_string(mAlpha_) + ")";
+}
+
+
+std::string ELU::printWeights() const {
+  return "(No Weights) ELU (" + std::to_string(mAlpha_) + ")";
 }
 
 ThresholdReLU::ThresholdReLU(double threshold) : mThreshold_(threshold) {}
@@ -129,6 +168,10 @@ std::string ThresholdReLU::prettyString() const {
   return "ThresholdReLU (" + std::to_string(mThreshold_) + ")";
 }
 
+std::string ThresholdReLU::printWeights() const {
+  return "(No Weights) ThresholdReLU (" + std::to_string(mThreshold_) + ")";
+}
+
 GatedLinearUnit::GatedLinearUnit(int dim) : dim_(dim) {}
 
 Variable GatedLinearUnit::forward(const Variable& input) {
@@ -140,7 +183,7 @@ std::string GatedLinearUnit::prettyString() const {
 }
 
 std::string GatedLinearUnit::printWeights() const {
-  return "GatedLinearUnit WEIGHTS";
+  return "(No Weights) GatedLinearUnit (" + std::to_string(dim_) + ")";
 }
 
 LogSoftmax::LogSoftmax(int dim /* = 0 */) : dim_(dim) {}
@@ -153,6 +196,11 @@ std::string LogSoftmax::prettyString() const {
   return "LogSoftmax (" + std::to_string(dim_) + ")";
 }
 
+std::string LogSoftmax::printWeights() const {
+  return "(No Weights) LogSoftmax (" + std::to_string(dim_) + ")";
+}
+
+
 Swish::Swish(double beta /* = 1.0 */) : beta_(beta) {}
 
 Variable Swish::forward(const Variable& input) {
@@ -161,6 +209,11 @@ Variable Swish::forward(const Variable& input) {
 
 std::string Swish::prettyString() const {
   return "Swish (" + std::to_string(beta_) + ")";
+}
+
+
+std::string Swish::printWeights() const {
+  return "(No Weights) Swish (" + std::to_string(beta_) + ")";
 }
 
 } // namespace fl

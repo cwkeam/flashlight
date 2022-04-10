@@ -137,4 +137,9 @@ std::string AdaptiveSoftMax::prettyString() const {
   return ss.str();
 }
 
+std::string AdaptiveSoftMax::printWeights() const {
+  return "(No Weights) Adaptive Softmax";
+}
+
+
 } // namespace fl

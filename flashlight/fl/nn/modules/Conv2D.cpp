@@ -185,7 +185,7 @@ std::string Conv2D::prettyString() const {
 
 std::string Conv2D::printWeights() const {
   std::ostringstream ss;
-  ss << af::toString("weights", params_[0].array());
+  ss << af::toString("Conv2D weights", params_[0].array());
   // if (bias_) {
   //   ss << "bias";
   //   ss << params_[1].array();

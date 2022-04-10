@@ -123,7 +123,7 @@ class Container : public Module {
    * @return a string containing the module label
    */
   virtual std::string prettyString() const override;
-  std::string printWeights() const;
+  virtual std::string printWeights() const;
 };
 
 /**

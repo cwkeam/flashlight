@@ -95,6 +95,7 @@ class AdaptiveSoftMax : public UnaryModule {
   std::vector<int> getCutoff() const;
 
   std::string prettyString() const override;
+  std::string printWeights() const override;
 };
 
 } // namespace fl
