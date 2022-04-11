@@ -31,7 +31,7 @@ class Sigmoid : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
-  std::string printWeights() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
