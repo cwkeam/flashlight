@@ -32,6 +32,7 @@ class Sigmoid : public UnaryModule {
 
   std::string prettyString() const override;
   std::string printWeights() const;
+   
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
@@ -48,6 +49,7 @@ class Log : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
@@ -66,6 +68,7 @@ class Tanh : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
@@ -88,6 +91,7 @@ class HardTanh : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
@@ -106,6 +110,7 @@ class ReLU : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
@@ -124,6 +129,7 @@ class ReLU6 : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(UnaryModule)
@@ -164,6 +170,7 @@ class LeakyReLU : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**
@@ -213,6 +220,7 @@ class PReLU : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**
@@ -242,6 +250,7 @@ class ELU : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**
@@ -274,6 +283,7 @@ class ThresholdReLU : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**
@@ -304,6 +314,7 @@ class GatedLinearUnit : public UnaryModule {
 
   std::string prettyString() const override;
   std::string printWeights() const;
+  
 };
 
 /**
@@ -330,6 +341,7 @@ class LogSoftmax : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 };
 
 /**
@@ -352,6 +364,7 @@ class Swish : public UnaryModule {
   Variable forward(const Variable& input) override;
 
   std::string prettyString() const override;
+  std::string printWeights() const;
 
  private:
   double beta_;
