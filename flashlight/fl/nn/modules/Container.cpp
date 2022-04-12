@@ -127,15 +127,15 @@ std::string Sequential::prettyString() const {
 
 std::string Sequential::printWeights() const {
   std::ostringstream ss;
-  ss << "Sequential Weights";
-  ss << " [input";
-  for (int i = 0; i < modules_.size(); ++i) {
-    ss << " -> (" << i << ")";
-  }
-  // ss << " -> output]";
+  ss << "WEIGHTS_Sequential\n";
+  // ss << " [input";
   // for (int i = 0; i < modules_.size(); ++i) {
-  //   ss << "\n\t(" << i << "): " << modules_[i]->printWeights();
+  //   ss << " -> (" << i << ")";
   // }
+  // ss << " -> output]";
+  for (int i = 0; i < modules_.size(); ++i) {
+    ss << "\n\t(WEIGHTS_" << i << "): " << modules_[i]->printWeights();
+  }
   return ss.str();
 }
 
