@@ -73,10 +73,11 @@ std::string Module::printWeights() const {
   std::ostringstream ss;
   ss << "!!MODULE_WEIGHTS";
 
-  // for (int i = 0; i < params_.size(); ++i) {
-  //   ss << af::toString("weights", params_[i].array());
-  // }
-  af::saveArray("PARAM", params_[0].array(), "111.arr");
+  for (int i = 0; i < params_.size(); ++i) {
+    af::saveArray("param_" + i, params_[i].array(), "param_"+i+".arr");
+    // ss << af::toString("weights", params_[i].array());
+  }
+  
   return ss.str();
 }
 

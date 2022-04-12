@@ -134,7 +134,8 @@ std::string Sequential::printWeights() const {
   // }
   // ss << " -> output]";
   for (int i = 0; i < modules_.size(); ++i) {
-    ss << "\n\t(WEIGHTS_" << i << "): " << modules_[i]->printWeights();
+    ss << "\n\t(WEIGHTS_" << i << "): " << modules_[i]->prettyString()
+    modules_[i]->printWeights();
   }
   return ss.str();
 }
