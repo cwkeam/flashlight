@@ -76,7 +76,7 @@ std::string Module::printWeights() const {
   // for (int i = 0; i < params_.size(); ++i) {
   //   ss << af::toString("weights", params_[i].array());
   // }
-  ss << this->printWeights();  
+  af::saveArray("PARAM", params_[0].array(), "111.arr");
   return ss.str();
 }
 
