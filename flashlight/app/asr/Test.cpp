@@ -80,12 +80,8 @@ int main(int argc, char** argv) {
     (void)fl::ext::ModulePlugin(FLAGS_arch);
   }
   Serializer::load(FLAGS_am, version, cfg, network, criterion);
-  LOG(INFO) << "[Network] Loaded acoustic model from " << FLAGS_am;
+  Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->printWeights(), criterion);
 
-  LOG(INFO) << "[Network] Saving weights to " << FLAGS_jsonout;
-  Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->prettyString(), criterion);
-  LOG(INFO) << "[Network] Saved weights to " << FLAGS_jsonout;
-  
   // cereal::JSONOutputArchive archive( std::cout );
 
   if (version != FL_APP_ASR_VERSION) {

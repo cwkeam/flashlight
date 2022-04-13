@@ -127,6 +127,7 @@ std::string Sequential::prettyString() const {
 
 std::string Sequential::printWeights() const {
   std::ostringstream ss;
+  int paramCum = 0;
   ss << "WEIGHTS_Sequential\n";
   // ss << " [input";
   // for (int i = 0; i < modules_.size(); ++i) {
@@ -134,9 +135,12 @@ std::string Sequential::printWeights() const {
   // }
   // ss << " -> output]";
   for (int i = 0; i < modules_.size(); ++i) {
-    ss << "\n\t(WEIGHTS_" << i << "): " << modules_[i]->prettyString();
-    modules_[i]->printWeights();
+    int paramSize = modules_[i]->paramSize();
+    ss << "\n\t(WEIGHTS_" << i << "): " << "n_params: " << modules_[i]->paramSize();
+    ss << modules_[i]->printWeights(paramCum);
+    paramCum = paramCum + paramSize;
   }
+
   return ss.str();
 }
 

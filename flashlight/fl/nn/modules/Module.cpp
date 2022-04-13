@@ -14,6 +14,7 @@
  ********************************************************/
 
 #include <stdexcept>
+#include <string> // header file for string
 
 #include "flashlight/fl/nn/modules/Module.h"
 
@@ -69,12 +70,36 @@ std::vector<Variable> Module::operator()(const std::vector<Variable>& input) {
   return this->forward(input);
 }
 
-std::string Module::printWeights() const {
-  std::ostringstream ss;
-  ss << "!!MODULE_WEIGHTS";
+int Module::paramSize() const {
+  return params_.size();
+}
 
-  for (int i = 0; i < params_.size(); ++i) {
-    af::saveArray("param_" + i, params_[i].array(), "param_" + i + ".arr");
+std::string Module::printWeights() const {
+  int start = 0;
+  std::ostringstream ss;
+  ss << this->prettyString();
+
+  for (int i = 0; i < params_.size(); i++) {
+    std::string paramname = "param_" + std::to_string(start + i);
+    std::string temp = "/content/" + paramname + ".arr";
+    af::saveArray(paramname.c_str(), params_[i].array(), temp.c_str());
+    ss << paramname + "\n";
+    // ss << af::toString("weights", params_[i].array());
+  }
+  
+  return ss.str();
+}
+
+
+std::string Module::printWeights(int start = 0) const {
+  std::ostringstream ss;
+  ss << this->prettyString();
+
+  for (int i = 0; i < params_.size(); i++) {
+    std::string paramname = "param_" + std::to_string(start + i);
+    std::string temp = "/content/" + paramname + ".arr";
+    af::saveArray(paramname.c_str(), params_[i].array(), temp.c_str());
+    ss << paramname + "\n";
     // ss << af::toString("weights", params_[i].array());
   }
   

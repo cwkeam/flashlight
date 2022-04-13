@@ -90,6 +90,7 @@ class Module {
    * @return a `Variable` tensor for the parameter at the requested position
    */
   Variable param(int position) const;
+  int paramSize() const;
 
   /**
    * Sets a parameter at a specified position with a new, given one.
@@ -137,6 +138,7 @@ class Module {
    */
   virtual std::string prettyString() const = 0;
   std::string printWeights() const;
+  std::string printWeights(int start) const;
 
   virtual ~Module() = default;
 };
