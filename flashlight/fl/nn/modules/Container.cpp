@@ -136,8 +136,10 @@ std::string Sequential::printWeights() const {
   // ss << " -> output]";
   for (int i = 0; i < modules_.size(); ++i) {
     int paramSize = modules_[i]->paramSize();
-    ss << "\n\t(WEIGHTS_" << i << "): " << "n_params: " << modules_[i]->paramSize();
-    ss << modules_[i]->printWeights(paramCum);
+    ss << "\n\t(WEIGHTS_" << i << "): " << "n_params: " << modules_[i]->paramSize() << "\n";
+    if (paramSize > 0){
+      ss << modules_[i]->printWeights(paramCum);
+    }
     paramCum = paramCum + paramSize;
   }
 

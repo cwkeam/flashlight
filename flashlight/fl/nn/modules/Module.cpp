@@ -94,7 +94,7 @@ std::string Module::printWeights(std::string path) const {
     std::string paramname = "param_" + std::to_string(start + i);
     // append = True
     af::saveArray(paramname.c_str(), params_[i].array(), full_path_char, true); 
-    ss << paramname + "\n";
+    ss << "\n" << paramname;
     // ss << af::toString("weights", params_[i].array());
   }
   
