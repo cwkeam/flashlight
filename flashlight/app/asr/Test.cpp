@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
   network->eval();
   criterion->eval();
 
-  LOG(INFO) << "WEIGHTS" << network->printWeights();
+  LOG(INFO) << "WEIGHTS" << network->printWeights(FLAGS_arrout);
   LOG(INFO) << "[Network] " << network->prettyString();
   LOG(INFO) << "[Criterion] " << criterion->prettyString();
   LOG(INFO) << "[Network] Number of params: " << numTotalParams(network);

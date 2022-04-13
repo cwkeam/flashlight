@@ -80,7 +80,7 @@ std::string Container::prettyString() const {
   return ss.str();
 }
 
-std::string Container::printWeights() const {
+std::string Container::printWeights(std::string path) const {
   std::ostringstream ss;
   ss << "Container WEIGHTS";
   return ss.str();
