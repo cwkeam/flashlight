@@ -15,12 +15,13 @@
 
 #include <stdexcept>
 #include <string> // header file for string
+#include <filesystem>
 
 #include "flashlight/fl/nn/modules/Module.h"
-
 #include "flashlight/fl/common/Utils.h"
 #include "flashlight/fl/nn/Init.h"
 
+namespace fs = std::filesystem;
 namespace fl {
 
 Module::Module() = default;
@@ -74,15 +75,25 @@ int Module::paramSize() const {
   return params_.size();
 }
 
-std::string Module::printWeights() const {
+std::string Module::printWeights(std::string path) const {
   int start = 0;
   std::ostringstream ss;
-  ss << this->prettyString();
+  
+  std::string prettyString = this->prettyString();
+  std::string delimiter = " ";
+  std::string moduleName = prettyString.substr(0, prettyString.find(delimiter));
 
+  ss << prettyString;
+  fs::path dir (path);
+  fs::path file (moduleName + ".arr");
+  fs::path full_path = dir / file;
+  char* full_path_char = full_path.string().c_str();
+  ss << "Saving to: " << full_path_char;
+  
   for (int i = 0; i < params_.size(); i++) {
     std::string paramname = "param_" + std::to_string(start + i);
-    std::string temp = "/content/" + paramname + ".arr";
-    af::saveArray(paramname.c_str(), params_[i].array(), temp.c_str());
+    // append = True
+    af::saveArray(paramname.c_str(), params_[i].array(), full_path_char, true); 
     ss << paramname + "\n";
     // ss << af::toString("weights", params_[i].array());
   }
@@ -91,13 +102,13 @@ std::string Module::printWeights() const {
 }
 
 
-std::string Module::printWeights(int start = 0) const {
+std::string Module::printWeights(std::string path, int start = 0) const {
   std::ostringstream ss;
   ss << this->prettyString();
 
   for (int i = 0; i < params_.size(); i++) {
     std::string paramname = "param_" + std::to_string(start + i);
-    std::string temp = "/content/" + paramname + ".arr";
+    std::string temp = path + paramname + ".arr";
     af::saveArray(paramname.c_str(), params_[i].array(), temp.c_str());
     ss << paramname + "\n";
     // ss << af::toString("weights", params_[i].array());
