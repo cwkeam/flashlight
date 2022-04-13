@@ -89,7 +89,7 @@ std::string Module::printWeights(std::string path) const {
   // fs::path full_path = dir / file;
   // const char* full_path_char = full_path.string().c_str();
   std::string fileName = moduleName + ".arr";
-  std::string full_path = path + fileName
+  std::string full_path = path + fileName;
   const char* full_path_char = full_path.c_str();
   ss << "Saving to: " << full_path_char;
   
