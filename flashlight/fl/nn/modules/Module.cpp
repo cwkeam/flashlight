@@ -15,13 +15,13 @@
 
 #include <stdexcept>
 #include <string> // header file for string
-#include <filesystem>
+#include <experimental/filesystem>
 
 #include "flashlight/fl/nn/modules/Module.h"
 #include "flashlight/fl/common/Utils.h"
 #include "flashlight/fl/nn/Init.h"
 
-namespace fs = std::filesystem;
+namespace fs = std::experimental::filesystem;
 namespace fl {
 
 Module::Module() = default;
