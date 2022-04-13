@@ -426,7 +426,11 @@ DEFINE_string(
 DEFINE_string(
     jsonout,
     "",
-    "path/to/acoustic_model, used also to continue and fork training");
+    "path/to/json_file to save checkpoint in json");
+DEFINE_string(
+    arrout,
+    "",
+    "path/to/arr_folder to save checkpoint params in arrayfire arrays.");
 
 DEFINE_string(sclite, "", "[decode] path/to/sclite to be written");
 DEFINE_string(

@@ -195,6 +195,7 @@ DECLARE_string(emission_dir);
 DECLARE_string(lm);
 DECLARE_string(am);
 DECLARE_string(jsonout);
+DECLARE_string(arrout);
 DECLARE_string(sclite);
 DECLARE_string(decodertype);
 

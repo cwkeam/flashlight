@@ -12,7 +12,7 @@
  * The complete license agreement can be obtained at:
  * http://arrayfire.com/licenses/BSD-3-Clause
  ********************************************************/
-
+#include <string>
 #include "flashlight/fl/nn/modules/Container.h"
 
 #include "flashlight/fl/autograd/Variable.h"
@@ -125,7 +125,7 @@ std::string Sequential::prettyString() const {
   return ss.str();
 }
 
-std::string Sequential::printWeights() const {
+std::string Sequential::printWeights(std::string path) const {
   std::ostringstream ss;
   int paramCum = 0;
   ss << "WEIGHTS_Sequential\n";
@@ -138,7 +138,7 @@ std::string Sequential::printWeights() const {
     int paramSize = modules_[i]->paramSize();
     ss << "\n\t(WEIGHTS_" << i << "): " << "n_params: " << modules_[i]->paramSize() << "\n";
     if (paramSize > 0){
-      ss << modules_[i]->printWeights(paramCum);
+      ss << modules_[i]->printWeights(path, paramCum);
     }
     paramCum = paramCum + paramSize;
   }

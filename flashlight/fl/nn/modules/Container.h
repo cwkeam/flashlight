@@ -174,7 +174,7 @@ class Sequential : public Container {
    * @return a string containing the module label
    */
   std::string prettyString() const override;
-  std::string printWeights() const;
+  std::string printWeights(std::string path) const;
 
  private:
   FL_SAVE_LOAD_WITH_BASE(Container)

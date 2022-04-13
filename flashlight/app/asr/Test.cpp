@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
     (void)fl::ext::ModulePlugin(FLAGS_arch);
   }
   Serializer::load(FLAGS_am, version, cfg, network, criterion);
-  Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->printWeights(), criterion);
+  Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->printWeights(FLAGS_arrout), criterion);
 
   // cereal::JSONOutputArchive archive( std::cout );
 
