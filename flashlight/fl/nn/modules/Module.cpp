@@ -82,8 +82,9 @@ std::string Module::printWeights(std::string path) const {
   std::string prettyString = this->prettyString();
   std::string delimiter = " ";
   std::string moduleName = prettyString.substr(0, prettyString.find(delimiter));
-
+  ss << "Module::printWeights start\n";
   ss << prettyString;
+  ss << "Module::prettyString() done\n";
   // fs::path dir (path);
   // fs::path file (moduleName + ".arr");
   // fs::path full_path = dir / file;
