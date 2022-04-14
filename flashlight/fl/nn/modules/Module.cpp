@@ -76,7 +76,7 @@ int Module::paramSize() const {
 }
 
 std::string Module::printWeights(std::string path) const {
-  return this->printWeights(path)
+  return this->printWeights(path);
 }
 // std::string Module::printWeights(std::string path) const {
 //   int start = 0;
