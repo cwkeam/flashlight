@@ -75,16 +75,16 @@ int Module::paramSize() const {
   return params_.size();
 }
 
-std::string Module::printWeights(std::string path) const {
-  std::ostringstream ss;
-  ss << "\nModule[0]::printWeights start\n";
-  // ss << this->prettyString();
-  // ss << modules_[0]->printWeights(path);
-  ss << this->modules_[0]->prettyString();
-  ss << "Module[0]::prettyString() done\n";
-  // this->printWeights(path);
-  return ss.str();
-}
+// std::string Module::printWeights(std::string path) const {
+//   std::ostringstream ss;
+//   ss << "\nModule[0]::printWeights start\n";
+//   ss << this->prettyString();
+//   ss << this->printWeights(path);
+//   // ss << this->modules_[0/->prettyString();
+//   ss << "Module[0]::prettyString() done\n";
+//   // this->printWeights(path);
+//   return ss.str();
+// }
 
 // std::string Module::printWeights(std::string path) const {
 //   int start = 0;
