@@ -77,8 +77,9 @@ int Module::paramSize() const {
 
 std::string Module::printWeights(std::string path) const {
   std::ostringstream ss;
-  ss << "Module::printWeights start\n";
-  ss << this->prettyString();
+  ss << "\nModule::printWeights start\n";
+  // ss << this->prettyString();
+  ss << this->printWeights(path);
   ss << "Module::prettyString() done\n";
   // this->printWeights(path);
   return ss.str();

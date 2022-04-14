@@ -134,14 +134,14 @@ std::string Sequential::printWeights(std::string path) const {
   //   ss << " -> (" << i << ")";
   // }
   // ss << " -> output]";
-  for (int i = 0; i < modules_.size(); ++i) {
-    int paramSize = modules_[i]->paramSize();
-    ss << "\n\t(WEIGHTS_" << i << "): " << "n_params: " << modules_[i]->paramSize() << "\n";
-    if (paramSize > 0){
-      ss << modules_[i]->printWeights(path, paramCum);
-    }
-    paramCum = paramCum + paramSize;
-  }
+  // for (int i = 0; i < modules_.size(); ++i) {
+  //   int paramSize = modules_[i]->paramSize();
+  //   ss << "\n\t(WEIGHTS_" << i << "): " << "n_params: " << modules_[i]->paramSize() << "\n";
+  //   if (paramSize > 0){
+  //     ss << modules_[i]->printWeights(path, paramCum);
+  //   }
+  //   paramCum = paramCum + paramSize;
+  // }
 
   return ss.str();
 }
