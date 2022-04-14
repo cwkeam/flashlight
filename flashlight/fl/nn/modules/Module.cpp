@@ -75,15 +75,48 @@ int Module::paramSize() const {
   return params_.size();
 }
 
+std::string Module::printWeights(std::string path) const {
+  std::ostringstream ss;
+  ss << "\nModule[0]::printWeights start\n";
+  // ss << this->prettyString();
+  // ss << modules_[0]->printWeights(path);
+  ss << modules_[0]->prettyString();
+  ss << "Module[0]::prettyString() done\n";
+  // this->printWeights(path);
+  return ss.str();
+}
+
 // std::string Module::printWeights(std::string path) const {
+//   int start = 0;
 //   std::ostringstream ss;
-//   ss << "\nModule::printWeights start\n";
-//   // ss << this->prettyString();
-//   ss << this->printWeights(path);
+  
+//   std::string prettyString = this->prettyString();
+//   std::string delimiter = " ";
+//   std::string moduleName = prettyString.substr(0, prettyString.find(delimiter));
+
+//   ss << "Module::printWeights start\n";
+//   ss << prettyString;
 //   ss << "Module::prettyString() done\n";
-//   // this->printWeights(path);
+//   // fs::path dir (path);
+//   // fs::path file (moduleName + ".arr");
+//   // fs::path full_path = dir / file;
+//   // const char* full_path_char = full_path.string().c_str();
+//   std::string fileName = moduleName + ".arr";
+//   std::string full_path = path + fileName;
+//   const char* full_path_char = full_path.c_str();
+//   ss << "Saving to: " << full_path_char;
+  
+//   for (int i = 0; i < params_.size(); i++) {
+//     std::string paramname = "param_" + std::to_string(start + i);
+//     // append = True
+//     af::saveArray(paramname.c_str(), params_[i].array(), full_path_char, true); 
+//     ss << "\n" << paramname;
+//     // ss << af::toString("weights", params_[i].array());
+//   }
+  
 //   return ss.str();
 // }
+
 
 // std::string Module::printWeights(std::string path) const {
 //   int start = 0;
@@ -116,20 +149,20 @@ int Module::paramSize() const {
 // }
 
 
-std::string Module::printWeights(std::string path, int start = 0) const {
-  std::ostringstream ss;
-  ss << this->prettyString();
+// std::string Module::printWeights(std::string path, int start = 0) const {
+//   std::ostringstream ss;
+//   ss << this->prettyString();
 
-  for (int i = 0; i < params_.size(); i++) {
-    std::string paramname = "param_" + std::to_string(start + i);
-    std::string temp = path + paramname + ".arr";
-    af::saveArray(paramname.c_str(), params_[i].array(), temp.c_str());
-    ss << paramname + "\n";
-    // ss << af::toString("weights", params_[i].array());
-  }
+//   for (int i = 0; i < params_.size(); i++) {
+//     std::string paramname = "param_" + std::to_string(start + i);
+//     std::string temp = path + paramname + ".arr";
+//     af::saveArray(paramname.c_str(), params_[i].array(), temp.c_str());
+//     ss << paramname + "\n";
+//     // ss << af::toString("weights", params_[i].array());
+//   }
   
-  return ss.str();
-}
+//   return ss.str();
+// }
 
 
 UnaryModule::UnaryModule() = default;
