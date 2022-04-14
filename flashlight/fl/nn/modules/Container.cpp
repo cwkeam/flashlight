@@ -125,7 +125,7 @@ std::string Sequential::prettyString() const {
   return ss.str();
 }
 
-std::string Sequential::printWeights(std::string path) const override {
+std::string Sequential::printWeights(std::string path) const {
   std::ostringstream ss;
   int paramCum = 0;
   ss << "WEIGHTS_Sequential\n";
