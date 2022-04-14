@@ -75,35 +75,35 @@ int Module::paramSize() const {
   return params_.size();
 }
 
-std::string Module::printWeights(std::string path) const {
-  int start = 0;
-  std::ostringstream ss;
+// std::string Module::printWeights(std::string path) const {
+//   int start = 0;
+//   std::ostringstream ss;
   
-  std::string prettyString = this->prettyString();
-  std::string delimiter = " ";
-  std::string moduleName = prettyString.substr(0, prettyString.find(delimiter));
-  ss << "Module::printWeights start\n";
-  ss << prettyString;
-  ss << "Module::prettyString() done\n";
-  // fs::path dir (path);
-  // fs::path file (moduleName + ".arr");
-  // fs::path full_path = dir / file;
-  // const char* full_path_char = full_path.string().c_str();
-  std::string fileName = moduleName + ".arr";
-  std::string full_path = path + fileName;
-  const char* full_path_char = full_path.c_str();
-  ss << "Saving to: " << full_path_char;
+//   std::string prettyString = this->prettyString();
+//   std::string delimiter = " ";
+//   std::string moduleName = prettyString.substr(0, prettyString.find(delimiter));
+//   ss << "Module::printWeights start\n";
+//   ss << prettyString;
+//   ss << "Module::prettyString() done\n";
+//   // fs::path dir (path);
+//   // fs::path file (moduleName + ".arr");
+//   // fs::path full_path = dir / file;
+//   // const char* full_path_char = full_path.string().c_str();
+//   std::string fileName = moduleName + ".arr";
+//   std::string full_path = path + fileName;
+//   const char* full_path_char = full_path.c_str();
+//   ss << "Saving to: " << full_path_char;
   
-  for (int i = 0; i < params_.size(); i++) {
-    std::string paramname = "param_" + std::to_string(start + i);
-    // append = True
-    af::saveArray(paramname.c_str(), params_[i].array(), full_path_char, true); 
-    ss << "\n" << paramname;
-    // ss << af::toString("weights", params_[i].array());
-  }
+//   for (int i = 0; i < params_.size(); i++) {
+//     std::string paramname = "param_" + std::to_string(start + i);
+//     // append = True
+//     af::saveArray(paramname.c_str(), params_[i].array(), full_path_char, true); 
+//     ss << "\n" << paramname;
+//     // ss << af::toString("weights", params_[i].array());
+//   }
   
-  return ss.str();
-}
+//   return ss.str();
+// }
 
 
 std::string Module::printWeights(std::string path, int start = 0) const {
