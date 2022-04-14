@@ -80,7 +80,7 @@ std::string Module::printWeights(std::string path) const {
   ss << "Module::printWeights start\n";
   ss << this->prettyString();
   ss << "Module::prettyString() done\n";
-  this->printWeights(path);
+  // this->printWeights(path);
   return ss.str();
 }
 // std::string Module::printWeights(std::string path) const {
