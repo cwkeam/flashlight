@@ -73,9 +73,20 @@ fl::Dataset::DataTransformFunction inputFeatures(
     }
     auto channels = dims[0];
     std::vector<float> input(dims.elements());
+
+    const char* savePathChar = "/content/features.arr";
+
+    auto input_arr = af::array(input.size(), input.data());
+    af::saveArray("input_raw", input_arr, savePathChar, true); 
+
+
     std::copy_n(static_cast<const float*>(data), input.size(), input.data());
     if (channels > 1) {
       input = transpose2d(input, dims[1], channels);
+
+      auto input_transpose = af::array(input.size(), input.data());
+      af::saveArray("input_transpose2d", input_transpose, savePathChar, true); 
+
     }
     if (!sfxConf.empty() && sfxCounter->decrementAndCheck()) {
       if (channels > 1) {
@@ -93,30 +104,55 @@ fl::Dataset::DataTransformFunction inputFeatures(
       thread_local PowerSpectrum powspec(params);
       featSz = params.powSpecFeatSz();
       output = powspec.batchApply(input, channels);
+
+      auto output_arr = af::array(output.size(), output.data());
+      af::saveArray("output_POW_SPECTRUM", output_arr, savePathChar, true); 
+
     } else if (featureType == FeatureType::MFSC) {
       thread_local Mfsc mfsc(params);
       featSz = params.mfscFeatSz();
       output = mfsc.batchApply(input, channels);
+
+      auto output_arr = af::array(output.size(), output.data());
+      af::saveArray("output_MFSC", output_arr, savePathChar, true); 
+
     } else if (featureType == FeatureType::MFCC) {
       thread_local Mfcc mfcc(params);
       featSz = params.mfccFeatSz();
       output = mfcc.batchApply(input, channels);
+
+      auto output_arr = af::array(output.size(), output.data());
+      af::saveArray("output_MFCC", output_arr, savePathChar, true); 
+
     } else {
       // use raw audio
       output = input; // T X CHANNELS (Col Major)
+      auto output_arr = af::array(output.size(), output.data());
+      af::saveArray("output_RAW", output_arr, savePathChar, true);
     }
 
     auto T = output.size() / (featSz * channels);
     // Before: FEAT X FRAMES X CHANNELS  (Col Major)
     output = transpose2d(output, T, featSz, channels);
+
+    auto output_arr = af::array(output.size(), output.data());
+    af::saveArray("output_T_then_transpose", output_arr, savePathChar, true);
     // After: FRAMES X FEAT X CHANNELS  (Col Major)
     if (localNormCtx.first > 0 || localNormCtx.second > 0) {
       output =
           localNormalize(output, localNormCtx.first, localNormCtx.second, T);
+      
+      auto output_arr = af::array(output.size(), output.data());
+      af::saveArray("output_localNormalize", output_arr, savePathChar, true);
     } else {
       output = normalize(output);
+      auto output_arr = af::array(output.size(), output.data());
+      af::saveArray("output_normalize", output_arr, savePathChar, true);
     }
-    return af::array(T, featSz, channels, output.data());
+    auto finalOutput = af::array(T, featSz, channels, output.data());
+    af::saveArray("output_finalOutput", finalOutput, savePathChar, true);
+
+    return finalOutput
   };
 }
 
