@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
     (void)fl::ext::ModulePlugin(FLAGS_arch);
   }
   Serializer::load(FLAGS_am, version, cfg, network, criterion);
-  Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->printWeights(FLAGS_arrout), criterion);
+  // Serializer::saveJSON(FLAGS_jsonout, version, cfg, network->printWeights(FLAGS_arrout), criterion);
 
   // cereal::JSONOutputArchive archive( std::cout );
 
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
   network->eval();
   criterion->eval();
 
-  LOG(INFO) << "WEIGHTS" << network->printWeights(FLAGS_arrout);
+  // LOG(INFO) << "WEIGHTS" << network->printWeights(FLAGS_arrout);
   LOG(INFO) << "[Network] " << network->prettyString();
   LOG(INFO) << "[Criterion] " << criterion->prettyString();
   LOG(INFO) << "[Network] Number of params: " << numTotalParams(network);
