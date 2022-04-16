@@ -152,7 +152,7 @@ fl::Dataset::DataTransformFunction inputFeatures(
     auto finalOutput = af::array(T, featSz, channels, output.data());
     af::saveArray("output_finalOutput", finalOutput, savePathChar, true);
 
-    return finalOutput
+    return finalOutput;
   };
 }
 
