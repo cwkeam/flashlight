@@ -88,6 +88,12 @@ fl::Dataset::DataTransformFunction inputFeatures(
       af::saveArray("input_transpose2d", input_transpose, savePathChar, true); 
 
     }
+
+
+    input_arr = af::array(input.size(), input.data());
+    af::saveArray("input_raw_2", input_arr, savePathChar, true); 
+
+
     if (!sfxConf.empty() && sfxCounter->decrementAndCheck()) {
       if (channels > 1) {
         throw std::invalid_argument(
@@ -98,6 +104,10 @@ fl::Dataset::DataTransformFunction inputFeatures(
           sfx::createSoundEffect(sfxConf, seed);
       sfx->apply(input);
     }
+
+    input_arr = af::array(input.size(), input.data());
+    af::saveArray("input_raw_3", input_arr, savePathChar, true); 
+
     std::vector<float> output;
     int featSz = 1;
     if (featureType == FeatureType::POW_SPECTRUM) {
