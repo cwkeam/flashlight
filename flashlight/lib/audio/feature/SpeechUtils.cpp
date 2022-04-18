@@ -41,6 +41,18 @@ std::vector<float> frameSignal(
   return frames;
 }
 
+// inSize = 154000
+// frameSize = 25 * 16000 / 1000 = 400
+// frameStride = 10 * 16000 / 1000 = 160
+
+// frames.length == numframes * frameSize
+// numframes = 1 + floor((inSize - frameSize) * 1.0 / frameStride)
+// frameSize = frameSize
+
+// ((inSize - frameSize) * 1.0 / frameStride) * frameSize = 384000
+
+// 400*((154000 - 400) / 160 )
+
 std::vector<float> cblasGemm(
     const std::vector<float>& matA,
     const std::vector<float>& matB,
