@@ -6,7 +6,7 @@
  */
 
 #include "flashlight/lib/audio/feature/Mfsc.h"
-
+#include <iostream>
 #include <algorithm>
 #include <cstddef>
 #include <numeric>
