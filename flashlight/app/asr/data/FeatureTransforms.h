@@ -164,14 +164,16 @@ std::vector<T> normalize(
   auto out(in);
   const char* savePathChar = "/content/features.arr";
 
+  std::string paramname = "";
   auto output_arr = af::array(out.size(), out.data());
   af::saveArray("output_normalize_input", output_arr, savePathChar, true);
   
   int64_t perBatchSz = out.size() / batchSz;
   for (size_t b = 0; b < batchSz; ++b) {
 
+    paramname = "output_normalize_start_" + std::to_string(b);
     output_arr = af::array(out.size(), out.data());
-    af::saveArray("output_normalize_start", output_arr, savePathChar, true);
+    af::saveArray(paramname.c_str(), output_arr, savePathChar, true);
 
     auto start = out.begin() + b * perBatchSz;
     T sum = std::accumulate(start, start + perBatchSz, 0.0);
@@ -179,8 +181,9 @@ std::vector<T> normalize(
     std::transform(
         start, start + perBatchSz, start, [mean](T x) { return x - mean; });
 
+    paramname = "output_normalize_mean_" + std::to_string(b);
     output_arr = af::array(out.size(), out.data());
-    af::saveArray("output_normalize_mean", output_arr, savePathChar, true);
+    af::saveArray(paramname.c_str(), output_arr, savePathChar, true);
 
     T sq_sum = std::inner_product(start, start + perBatchSz, start, 0.0);
     T stddev = std::sqrt(sq_sum / perBatchSz);
@@ -188,13 +191,16 @@ std::vector<T> normalize(
       std::transform(start, start + perBatchSz, start, [stddev](T x) {
         return x / stddev;
       });
+
+      paramname = "output_normalize_greater_" + std::to_string(b);
       output_arr = af::array(out.size(), out.data());
-      af::saveArray("output_normalize_greater", output_arr, savePathChar, true);
+      af::saveArray(paramname.c_str(), output_arr, savePathChar, true);
 
     }
-    output_arr = af::array(out.size(), out.data());
-    af::saveArray("output_normalize_stddev", output_arr, savePathChar, true);
 
+    paramname = "output_normalize_stddev" + std::to_string(b);
+    output_arr = af::array(out.size(), out.data());
+    af::saveArray(paramname.c_str(), output_arr, savePathChar, true);
   }
   return out;
 }
