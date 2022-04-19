@@ -85,7 +85,7 @@ std::vector<float> Mfsc::mfscImpl(std::vector<float>& frames) {
   std::cout << "MFSC IMPL RUN";
   auto powspectrum = this->powSpectrumImpl(frames);
   if (this->featParams_.usePower) {
-    std:cout << "USE POWER";
+    std::cout << "USE POWER";
     std::transform(
         powspectrum.begin(),
         powspectrum.end(),
