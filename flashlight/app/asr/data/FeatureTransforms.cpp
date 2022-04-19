@@ -148,6 +148,7 @@ fl::Dataset::DataTransformFunction inputFeatures(
     auto output_arr = af::array(output.size(), output.data());
     af::saveArray("output_T_then_transpose", output_arr, savePathChar, true);
     // After: FRAMES X FEAT X CHANNELS  (Col Major)
+    
     if (localNormCtx.first > 0 || localNormCtx.second > 0) {
       output =
           localNormalize(output, localNormCtx.first, localNormCtx.second, T);
@@ -159,6 +160,7 @@ fl::Dataset::DataTransformFunction inputFeatures(
       auto output_arr = af::array(output.size(), output.data());
       af::saveArray("output_normalize", output_arr, savePathChar, true);
     }
+    
     auto finalOutput = af::array(T, featSz, channels, output.data());
     af::saveArray("output_finalOutput", finalOutput, savePathChar, true);
 

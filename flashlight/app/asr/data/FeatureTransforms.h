@@ -162,20 +162,35 @@ std::vector<T> normalize(
     return {};
   }
   auto out(in);
+  const char* savePathChar = "/content/features.arr";
   int64_t perBatchSz = out.size() / batchSz;
   for (size_t b = 0; b < batchSz; ++b) {
+
+    auto output_arr = af::array(out.size(), out.data());
+    af::saveArray("output_normalize_in", output_arr, savePathChar, true);
+
     auto start = out.begin() + b * perBatchSz;
     T sum = std::accumulate(start, start + perBatchSz, 0.0);
     T mean = sum / perBatchSz;
     std::transform(
         start, start + perBatchSz, start, [mean](T x) { return x - mean; });
+
+    auto output_arr = af::array(out.size(), out.data());
+    af::saveArray("output_normalize_mean", output_arr, savePathChar, true);
+
     T sq_sum = std::inner_product(start, start + perBatchSz, start, 0.0);
     T stddev = std::sqrt(sq_sum / perBatchSz);
     if (stddev > threshold) {
       std::transform(start, start + perBatchSz, start, [stddev](T x) {
         return x / stddev;
       });
+      auto output_arr = af::array(out.size(), out.data());
+      af::saveArray("output_normalize_greater", output_arr, savePathChar, true)
+
     }
+    auto output_arr = af::array(out.size(), out.data());
+    af::saveArray("output_normalize_stddev", output_arr, savePathChar, true);
+
   }
   return out;
 }
