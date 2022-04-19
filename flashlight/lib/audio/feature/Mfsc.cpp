@@ -31,6 +31,7 @@ Mfsc::Mfsc(const FeatureParams& params)
 }
 
 std::vector<float> Mfsc::apply(const std::vector<float>& input) {
+  std::cout << "TEST MFSC RUN";
   auto frames = frameSignal(input, this->featParams_);
   if (frames.empty()) {
     return {};
@@ -41,6 +42,7 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
 
   std::vector<float> energy(nFrames);
   if (this->featParams_.useEnergy && this->featParams_.rawEnergy) {
+    std::cout << "USE ENERGY AND RAW ENERGY";
     for (size_t f = 0; f < nFrames; ++f) {
       auto begin = frames.data() + f * nSamples;
       energy[f] = std::log(std::max(
@@ -52,7 +54,9 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
   auto mfscFeat = mfscImpl(frames);
   auto numFeat = this->featParams_.numFilterbankChans;
   if (this->featParams_.useEnergy) {
+    std::cout << "USE ENERGY2";
     if (!this->featParams_.rawEnergy) {
+      std::cout << "NO RAW ENERGY";
       for (size_t f = 0; f < nFrames; ++f) {
         auto begin = frames.data() + f * nSamples;
         energy[f] = std::log(std::max(
@@ -78,8 +82,10 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
 }
 
 std::vector<float> Mfsc::mfscImpl(std::vector<float>& frames) {
+  std::cout << "MFSC IMPL RUN";
   auto powspectrum = this->powSpectrumImpl(frames);
   if (this->featParams_.usePower) {
+    std:cout << "USE POWER";
     std::transform(
         powspectrum.begin(),
         powspectrum.end(),
