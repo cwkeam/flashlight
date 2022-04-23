@@ -109,7 +109,7 @@ Variable Conv2D::forward(const Variable& input) {
   auto px = derivePadding(input.dims(0), xFilter_, xStride_, xPad_, xDilation_);
   auto py = derivePadding(input.dims(1), yFilter_, yStride_, yPad_, yDilation_);
 
-  auto input_arr = af::array(input.size(), input.data());
+  auto input_arr = input.array();
   af::saveArray("input_conv2d", input_arr, savePathChar, true); 
 
   if (!(px >= 0 && py >= 0)) {
