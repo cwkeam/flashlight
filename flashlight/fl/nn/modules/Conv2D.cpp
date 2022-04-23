@@ -103,8 +103,15 @@ Conv2D::Conv2D(
 }
 
 Variable Conv2D::forward(const Variable& input) {
+  std::string savePath = "OUTPUT_CONV2D.arr";
+  const char* savePathChar = savePath.c_str();
+
   auto px = derivePadding(input.dims(0), xFilter_, xStride_, xPad_, xDilation_);
   auto py = derivePadding(input.dims(1), yFilter_, yStride_, yPad_, yDilation_);
+
+  auto input_arr = af::array(input.size(), input.data());
+  af::saveArray("input_conv2d", input_arr, savePathChar, true); 
+
   if (!(px >= 0 && py >= 0)) {
     throw std::invalid_argument("invalid padding for Conv2D");
   }
