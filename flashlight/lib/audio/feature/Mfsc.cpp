@@ -6,12 +6,11 @@
  */
 
 #include "flashlight/lib/audio/feature/Mfsc.h"
-#include <arrayfire.h>
 #include <iostream>
 #include <algorithm>
 #include <cstddef>
 #include <numeric>
-
+#include "flashlight/fl/common/Utils.h"
 #include "flashlight/lib/audio/feature/SpeechUtils.h"
 using namespace af;
 
