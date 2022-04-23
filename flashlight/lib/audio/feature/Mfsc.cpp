@@ -10,9 +10,9 @@
 #include <algorithm>
 #include <cstddef>
 #include <numeric>
-#include "flashlight/fl/common/Utils.h"
+#include </opt/arrayfire/include/arrayfire.h>
+
 #include "flashlight/lib/audio/feature/SpeechUtils.h"
-using namespace af;
 
 namespace fl {
 namespace lib {
