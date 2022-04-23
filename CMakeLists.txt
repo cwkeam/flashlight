@@ -113,11 +113,19 @@ if (FL_BUILD_TESTS)
   include(TestUtils)
 endif ()
 
+find_package(cereal)
+find_package(ArrayFire)
+
+# To use Unified backend, do the following.
+# Unified backend lets you choose the backend at runtime
+target_link_libraries(<my_executable> ArrayFire::af)
+
+
 # ------------------------ flashlight Libraries ------------------------
 # FIXME: libraries are required to build core tests - https://git.io/JL955
 if (FL_BUILD_LIBRARIES OR (FL_BUILD_CORE AND FL_BUILD_TESTS))
-  find_package(cereal)
   
+
   message(STATUS "Will build flashlight libraries.")
 
   option(FL_LIBRARIES_USE_CUDA "Use CUDA in flashlight libraries build" ON)
