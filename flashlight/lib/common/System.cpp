@@ -10,7 +10,7 @@
 #include <glob.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <array>af
+#include <array>
 #include <cstdlib>
 #include <ctime>
 #include <functional>

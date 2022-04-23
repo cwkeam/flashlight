@@ -113,6 +113,36 @@ if (FL_BUILD_TESTS)
   include(TestUtils)
 endif ()
 
+
+# ------------------------ Global External Dependencies ------------------------
+# If cereal is found in a user-defined location, use it rather than
+# downloading from source
+find_package(cereal)
+if (NOT TARGET cereal AND NOT cereal_FOUND AND FL_BUILD_STANDALONE)
+  message(STATUS "cereal NOT found. Will download from source")
+  set(CEREAL_INSTALL_PATH ${FL_INSTALL_INC_DIR}/cereal)
+  include(${CMAKE_MODULE_PATH}/BuildCereal.cmake)
+  add_dependencies(flashlight cereal)
+  # Move cereal headers at install time
+  install(DIRECTORY ${CEREAL_SOURCE_DIR}/include/cereal
+    DESTINATION ${CEREAL_INSTALL_PATH}
+    COMPONENT cereal
+    FILES_MATCHING
+    PATTERN "*.hpp"
+    PATTERN "*.h"
+    PATTERN ".git" EXCLUDE
+    )
+  install(FILES ${CEREAL_SOURCE_DIR}/LICENSE ${CEREAL_SOURCE_DIR}/README.md
+    DESTINATION ${CEREAL_INSTALL_PATH}
+    )
+  target_include_directories(flashlight PUBLIC ${cereal_INCLUDE_DIRS})
+else()
+  message(STATUS "Found cereal")
+  target_link_libraries(flashlight PRIVATE cereal)
+endif()
+setup_install_find_module(${CMAKE_MODULE_PATH}/Findcereal.cmake)
+
+
 # ------------------------ flashlight Libraries ------------------------
 # FIXME: libraries are required to build core tests - https://git.io/JL955
 if (FL_BUILD_LIBRARIES OR (FL_BUILD_CORE AND FL_BUILD_TESTS))
@@ -165,33 +195,7 @@ if (FL_BUILD_CORE)
     add_coverage_to_target(TARGET flashlight)
   endif()
 
-  # ------------------------ Global External Dependencies ------------------------
-  # If cereal is found in a user-defined location, use it rather than
-  # downloading from source
-  find_package(cereal)
-  if (NOT TARGET cereal AND NOT cereal_FOUND AND FL_BUILD_STANDALONE)
-    message(STATUS "cereal NOT found. Will download from source")
-    set(CEREAL_INSTALL_PATH ${FL_INSTALL_INC_DIR}/cereal)
-    include(${CMAKE_MODULE_PATH}/BuildCereal.cmake)
-    add_dependencies(flashlight cereal)
-    # Move cereal headers at install time
-    install(DIRECTORY ${CEREAL_SOURCE_DIR}/include/cereal
-      DESTINATION ${CEREAL_INSTALL_PATH}
-      COMPONENT cereal
-      FILES_MATCHING
-      PATTERN "*.hpp"
-      PATTERN "*.h"
-      PATTERN ".git" EXCLUDE
-      )
-    install(FILES ${CEREAL_SOURCE_DIR}/LICENSE ${CEREAL_SOURCE_DIR}/README.md
-      DESTINATION ${CEREAL_INSTALL_PATH}
-      )
-    target_include_directories(flashlight PUBLIC ${cereal_INCLUDE_DIRS})
-  else()
-    message(STATUS "Found cereal")
-    target_link_libraries(flashlight PRIVATE cereal)
-  endif()
-  setup_install_find_module(${CMAKE_MODULE_PATH}/Findcereal.cmake)
+ 
 
   # -------------------- Locate Backend-specific Dependencies --------------------
   # TODO: rather than conditionally searching for backend-specific dependencies,
