@@ -14,7 +14,6 @@
 
 #include "flashlight/lib/audio/feature/SpeechUtils.h"
 
-using namespace af;
 
 namespace fl {
 namespace lib {
@@ -35,7 +34,7 @@ Mfsc::Mfsc(const FeatureParams& params)
 
 std::vector<float> Mfsc::apply(const std::vector<float>& input) {
   std::fstream file;
-  file.open("MFSC_OUT.txt", ios_base::out);
+  file.open("MFSC_OUT.txt", std::ios_base::out);
 
   for(int i=0;i<input.size();i++)
   {
@@ -120,7 +119,7 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
 
 std::vector<float> Mfsc::mfscImpl(std::vector<float>& frames) {
   std::fstream file;
-  file.open("MFSCImpl_OUT.txt", ios_base::out);
+  file.open("MFSCImpl_OUT.txt", std::ios_base::out);
 
   for(int i=0;i<frames.size();i++)
   {
