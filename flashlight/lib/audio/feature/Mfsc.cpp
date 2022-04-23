@@ -7,12 +7,12 @@
 
 #include "flashlight/lib/audio/feature/Mfsc.h"
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <cstddef>
 #include <numeric>
 
 #include "flashlight/lib/audio/feature/SpeechUtils.h"
-#include "flashlight/app/asr/data/FeatureTransforms.h"
 
 using namespace af;
 
@@ -34,11 +34,15 @@ Mfsc::Mfsc(const FeatureParams& params)
 }
 
 std::vector<float> Mfsc::apply(const std::vector<float>& input) {
-  std::string savePath = "OUTPUT_MFSC.arr";
-  const char* savePathChar = savePath.c_str();
+  std::fstream file;
+  file.open("MFSC_OUT.txt", ios_base::out);
 
-  auto input_arr = af::array(input.size(), input.data());
-  af::saveArray("msfc_1_input", input_arr, savePathChar, true);
+  for(int i=0;i<input.size();i++)
+  {
+      file<<input[i]<<std::endl;
+  }
+
+  file << std::endl;
 
   std::cout << "TEST MFSC RUN";
   auto frames = frameSignal(input, this->featParams_);
@@ -46,9 +50,12 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
     return {};
   }
 
-  input_arr = af::array(frames.size(), frames.data());
-  af::saveArray("msfc_2_frames", input_arr, savePathChar, true);
+  for(int i=0;i<frames.size();i++)
+  {
+      file<<frames[i]<<std::endl;
+  }
 
+  file << std::endl;
 
   int nSamples = this->featParams_.numFrameSizeSamples();
   int nFrames = frames.size() / nSamples;
@@ -69,8 +76,13 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
 
   auto mfscFeat = mfscImpl(frames);
 
-  input_arr = af::array(mfscFeat.size(), mfscFeat.data());
-  af::saveArray("msfc_3_mfscFeat", input_arr, savePathChar, true);
+  for(int i=0;i<mfscFeat.size();i++)
+  {
+      file<<mfscFeat[i]<<std::endl;
+  }
+
+  file << std::endl;
+
 
   auto numFeat = this->featParams_.numFilterbankChans;
 
@@ -100,23 +112,32 @@ std::vector<float> Mfsc::apply(const std::vector<float>& input) {
     ++numFeat;
   }
   // Derivatives will not be computed if windowsize < 0
+
+  file.close();
+
   return derivatives_.apply(mfscFeat, numFeat);
 }
 
 std::vector<float> Mfsc::mfscImpl(std::vector<float>& frames) {
-  std::string savePath = "OUTPUT_MFSC.arr";
-  const char* savePathChar = savePath.c_str();
+  std::fstream file;
+  file.open("MFSCImpl_OUT.txt", ios_base::out);
 
-  auto arr = af::array(frames.size(), frames.data());
-  af::saveArray("2_1_frames_msfcImpl", arr, savePathChar, true);
-
+  for(int i=0;i<frames.size();i++)
+  {
+      file<<frames[i]<<std::endl;
+  }
+  file << std::endl;
 
 
   std::cout << "MFSC IMPL RUN";
   auto powspectrum = this->powSpectrumImpl(frames);
 
-  arr = af::array(powspectrum.size(), powspectrum.data());
-  af::saveArray("2_2_powspectrum_msfcImpl", arr, savePathChar, true);
+  for(int i=0;i<powspectrum.size();i++)
+  {
+      file<<powspectrum[i]<<std::endl;
+  }
+  file << std::endl;
+
 
   // this doesn't run
   if (this->featParams_.usePower) {
@@ -132,17 +153,22 @@ std::vector<float> Mfsc::mfscImpl(std::vector<float>& frames) {
 
   std::cout << "melFLOOR=" << this->featParams_.melFloor;
 
-  arr = af::array(triflt.size(), triflt.data());
-  af::saveArray("2_3_triflt_msfcImpl", arr, savePathChar, true);
+  for(int i=0;i<triflt.size();i++)
+  {
+      file<<triflt[i]<<std::endl;
+  }
+  file << std::endl;
 
 
   std::transform(triflt.begin(), triflt.end(), triflt.begin(), [](float x) {
     return std::log(x);
   });
 
-  arr = af::array(triflt.size(), triflt.data());
-  af::saveArray("2_4_log_msfcImpl", arr, savePathChar, true);
-
+  for(int i=0;i<triflt.size();i++)
+  {
+      file<<triflt[i]<<std::endl;
+  }
+  file << std::endl;
 
   return triflt;
 }
