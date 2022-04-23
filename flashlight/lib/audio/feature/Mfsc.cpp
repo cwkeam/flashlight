@@ -14,6 +14,8 @@
 
 #include "flashlight/lib/audio/feature/SpeechUtils.h"
 
+using namespace af;
+
 namespace fl {
 namespace lib {
 namespace audio {
