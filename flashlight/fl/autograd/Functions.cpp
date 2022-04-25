@@ -1319,7 +1319,7 @@ fl::Variable multiheadAttention(
     arr = pscores.array();
     af::saveArray("MHAttention_pscores", arr, savePathChar, true); 
 
-    pscores = transpose(pscores.rows(n, n + k.dims(0) - 1))
+    pscores = transpose(pscores.rows(n, n + k.dims(0) - 1));
 
     arr = pscores.array();
     af::saveArray("MHAttention_pscores_transposed", arr, savePathChar, true); 
