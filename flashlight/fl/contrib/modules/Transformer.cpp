@@ -206,7 +206,7 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
 
     
 
-    h = (*norm2_)((f * mlp(h)).as(h.type()) + h)
+    h = (*norm2_)((f * mlp(h)).as(h.type()) + h);
 
     input_arr = h.array();
     af::saveArray("layer_h_2", input_arr, savePathChar, true); 
