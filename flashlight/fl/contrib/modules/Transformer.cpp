@@ -142,7 +142,7 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
 
   result = (*wf_)(transpose(result));
 
-  arr = wf_->params_[0].array();
+  arr = wf_.param(0).array();
   af::saveArray("selfAttention_wf_", arr, savePathChar, true); 
 
   arr = result.array();
@@ -193,9 +193,9 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
     input_arr = selfAttnResult.array();
     af::saveArray("layer_selfAttnResult", input_arr, savePathChar, true);
 
-    input_arr = norm1_->params_[0].array();
+    input_arr = norm1_.param(0).array();
     af::saveArray("layer_norm1_w", input_arr, savePathChar, true); 
-    input_arr = norm1_->params_[1].array();
+    input_arr = norm1_.param(1).array();
     af::saveArray("layer_norm1_b", input_arr, savePathChar, true); 
 
     auto h = (*norm1_)((f * selfAttnResult.as(x.type())) + x);
