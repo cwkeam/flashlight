@@ -60,6 +60,8 @@ Transformer::Transformer(
   add(wf_);
   add(norm1_);
   add(norm2_);
+  std::string savePath = "OUTPUT_TRF.arr";
+  const char* savePathChar = savePath.c_str();
 }
 
 Variable Transformer::mlp(const Variable& input) {
@@ -77,6 +79,8 @@ Variable Transformer::getMask(int32_t n, bool cache) {
 }
 
 Variable Transformer::selfAttention(const std::vector<Variable>& input) {
+  auto arr = input.array();
+  af::saveArray("selfAttention_input", arr, savePathChar, true); 
   // previous step[optionally], input, padMask
   auto encoderInput = input.at(input.size() - 2);
   // in case of previous state input[0] has size CxT_prevxB
@@ -92,10 +96,17 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
   if (bptt_ > 0) {
     posEmb =
         tile(params_[0].as(encoderInput.type()), af::dim4(1, 1, nHeads_ * bsz));
+
+    arr = posEmb.array();
+    af::saveArray("selfAttention_posEmb", arr, savePathChar, true); 
   }
   if (useMask_ && encoderInput.dims(1) > 1) {
     // mask future if we use the previous state (then n is previous time)
     mask = getMask(n, input.size() == 3);
+
+    arr = mask.array();
+    af::saveArray("selfAttention_mask", arr, savePathChar, true); 
+  
   }
 
   int offset = (input.size() == 2) ? 0 : n;
@@ -107,10 +118,20 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
     padMaskArr =
         af::resize(padMaskArr, encoderInput.dims(1), encoderInput.dims(2));
     padMask = fl::Variable(af::log(padMaskArr), false);
+
+    arr = padMask.array();
+    af::saveArray("selfAttention_mask", arr, savePathChar, true); 
   }
   auto result = multiheadAttention(
       q, k, v, posEmb, mask, padMask, nHeads_, pDrop, offset);
+    
+  auto arr = result.array();
+  af::saveArray("selfAttention_result", arr, savePathChar, true); 
+
   result = (*wf_)(transpose(result));
+
+  arr = result.array();
+  af::saveArray("selfAttention_result_2", arr, savePathChar, true); 
 
   return result;
 }
@@ -134,11 +155,27 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
   if (train_ && (af::randu(1).scalar<float>() < pLayerdrop_)) {
     f = 0.0;
   }
+
+  auto input_arr = x.array();
+  af::saveArray("layer_x", input_arr, savePathChar, true); 
+
+  input_arr = input.array();
+  af::saveArray("layer_input", input, savePathChar, true); 
+
+
   if (preLN_) {
     auto h = (f * (*norm1_)(selfAttention(input))).as(x.type()) + x;
+
+    input_arr = h.array();
+    af::saveArray("layer_h_preln", input_arr, savePathChar, true); 
+
     return {f * (*norm2_)(mlp(h)).as(h.type()) + h};
   } else {
     auto h = (*norm1_)((f * selfAttention(input)).as(x.type()) + x);
+
+    input_arr = h.array();
+    af::saveArray("layer_h", input_arr, savePathChar, true); 
+
     return {(*norm2_)((f * mlp(h)).as(h.type()) + h)};
   }
 }

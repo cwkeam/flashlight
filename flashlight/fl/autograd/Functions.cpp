@@ -1279,15 +1279,54 @@ fl::Variable multiheadAttention(
   auto v = moddims(value, af::dim4(-1, headDim, nHeads * bsz));
 
   q = q / std::sqrt(float(headDim));
+
+  auto arr = query.array();
+  af::saveArray("MHAttention_query", arr, savePathChar, true); 
+
+  arr = key.array();
+  af::saveArray("MHAttention_key", arr, savePathChar, true); 
+
+  arr = value.array();
+  af::saveArray("MHAttention_value", arr, savePathChar, true); 
+
+
+  arr = q.array();
+  af::saveArray("MHAttention_q", arr, savePathChar, true); 
+
+  arr = k.array();
+  af::saveArray("MHAttention_k", arr, savePathChar, true); 
+
+  arr = v.array();
+  af::saveArray("MHAttention_v", arr, savePathChar, true); 
+
   auto scores = matmulNT(q, k);
+
+  arr = scores.array();
+  af::saveArray("MHAttention_scores", arr, savePathChar, true); 
+
   if (!posEmb.isempty()) {
     int n = posEmb.dims(0) / 2 - offset;
     auto pscores =
         relativePositionEmbeddingRotate(matmulNT(posEmb.as(q.type()), q));
+
+    arr = pscores.array();
+    af::saveArray("MHAttention_pscores", arr, savePathChar, true); 
+
     scores = scores + transpose(pscores.rows(n, n + k.dims(0) - 1));
+
+    arr = scores.array();
+    af::saveArray("MHAttention_pscores_scores", arr, savePathChar, true); 
+
   }
   if (!mask.isempty()) {
     scores = scores + tileAs(mask.as(scores.type()), scores);
+
+    arr = mask.array();
+    af::saveArray("MHAttention_mask", arr, savePathChar, true); 
+
+    arr = scores.array();
+    af::saveArray("MHAttention_mask_scores", arr, savePathChar, true); 
+
   }
   if (!padMask.isempty()) {
     if (padMask.dims(0) != query.dims(0)) {
@@ -1297,14 +1336,35 @@ fl::Variable multiheadAttention(
     auto padMaskTile = moddims(padMask, af::dim4(1, padMask.dims(0), 1, bsz));
     padMaskTile = tileAs(
         padMaskTile, af::dim4(padMask.dims(0), padMask.dims(0), nHeads, bsz));
+
+    arr = padMaskTile.array();
+    af::saveArray("MHAttention_padMaskTile", arr, savePathChar, true); 
+
+
     scores = scores +
         moddims(padMaskTile.as(scores.type()),
                 af::dim4(padMask.dims(0), padMask.dims(0), nHeads * bsz));
+
+    arr = scores.array();
+    af::saveArray("MHAttention_padMaskTile_scores", arr, savePathChar, true);
   }
 
+  arr = scores.array();
+  af::saveArray("MHAttention_result", arr, savePathChar, true);
   auto attn = dropout(softmax(scores, 1), pDropout);
+
+  arr = attn.array();
+  af::saveArray("MHAttention_result_attn", arr, savePathChar, true);
+
   auto result = matmul(attn.as(v.type()), v);
+
+  arr = result.array();
+  af::saveArray("MHAttention_result_result", arr, savePathChar, true);
+
   result = moddims(result, af::dim4(-1, headDim * nHeads, bsz));
+
+  arr = result.array();
+  af::saveArray("MHAttention_result_result_2", arr, savePathChar, true);
   return result;
 }
 
