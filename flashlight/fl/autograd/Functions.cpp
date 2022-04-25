@@ -1309,19 +1309,30 @@ fl::Variable multiheadAttention(
 
   if (!posEmb.isempty()) {
     int n = posEmb.dims(0) / 2 - offset;
-    auto pscores =
-        relativePositionEmbeddingRotate(matmulNT(posEmb.as(q.type()), q));
+    auto matmulPos = matmulNT(posEmb.as(q.type()), q);
+    
+    arr = matmulPos.array();
+    af::saveArray("MHAttention_matmulPos", arr, savePathChar, true); 
+
+    auto pscores = relativePositionEmbeddingRotate(matmulPos);
 
     arr = pscores.array();
     af::saveArray("MHAttention_pscores", arr, savePathChar, true); 
 
-    scores = scores + transpose(pscores.rows(n, n + k.dims(0) - 1));
+    pscores = transpose(pscores.rows(n, n + k.dims(0) - 1))
+
+    arr = pscores.array();
+    af::saveArray("MHAttention_pscores_transposed", arr, savePathChar, true); 
+
+    scores = scores + pscores;
 
     arr = scores.array();
     af::saveArray("MHAttention_pscores_scores", arr, savePathChar, true); 
 
   }
+
   if (!mask.isempty()) {
+    // does not run.
     scores = scores + tileAs(mask.as(scores.type()), scores);
 
     arr = mask.array();
@@ -1331,6 +1342,7 @@ fl::Variable multiheadAttention(
     af::saveArray("MHAttention_mask_scores", arr, savePathChar, true); 
 
   }
+
   if (!padMask.isempty()) {
     if (padMask.dims(0) != query.dims(0)) {
       throw std::invalid_argument(
