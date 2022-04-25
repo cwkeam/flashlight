@@ -130,7 +130,7 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
   auto result = multiheadAttention(
       q, k, v, posEmb, mask, padMask, nHeads_, pDrop, offset);
     
-  auto arr = result.array();
+  arr = result.array();
   af::saveArray("selfAttention_result", arr, savePathChar, true); 
 
   result = (*wf_)(transpose(result));
