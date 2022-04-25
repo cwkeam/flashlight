@@ -97,6 +97,13 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
   auto k = transpose((*wk_)(concatenate(inputWithState, 1)));
   auto v = transpose((*wv_)(concatenate(inputWithState, 1)));
 
+  arr = q.array();
+  af::saveArray("selfAttention_q", arr, savePathChar, true); 
+  arr = k.array();
+  af::saveArray("selfAttention_k", arr, savePathChar, true); 
+  arr = v.array();
+  af::saveArray("selfAttention_v", arr, savePathChar, true); 
+
   Variable mask, posEmb;
   if (bptt_ > 0) {
     posEmb =
@@ -125,7 +132,7 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
     padMask = fl::Variable(af::log(padMaskArr), false);
 
     arr = padMask.array();
-    af::saveArray("selfAttention_mask", arr, savePathChar, true); 
+    af::saveArray("selfAttention_padMask", arr, savePathChar, true); 
   }
   auto result = multiheadAttention(
       q, k, v, posEmb, mask, padMask, nHeads_, pDrop, offset);
