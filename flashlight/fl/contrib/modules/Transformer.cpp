@@ -198,7 +198,7 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
     input_arr = norm1_.params[1].array();
     af::saveArray("layer_norm1_b", input_arr, savePathChar, true); 
 
-    auto h = (*norm1_)((f * selfAttnResult.as(x.type()) + x);
+    auto h = (*norm1_)((f * selfAttnResult.as(x.type())) + x);
 
     
     input_arr = h.array();
