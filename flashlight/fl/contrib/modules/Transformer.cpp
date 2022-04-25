@@ -188,7 +188,7 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
     return {f * (*norm2_)(mlp(h)).as(h.type()) + h};
   } else {
     // f is used for dropout; it's not some parameter...
-    auto selfAttnResult = selfAttention(input));
+    auto selfAttnResult = selfAttention(input);
 
     input_arr = selfAttnResult.array();
     af::saveArray("layer_selfAttnResult", input_arr, savePathChar, true);
