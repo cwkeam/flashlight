@@ -1278,6 +1278,9 @@ fl::Variable multiheadAttention(
   auto k = moddims(key, af::dim4(-1, headDim, nHeads * bsz));
   auto v = moddims(value, af::dim4(-1, headDim, nHeads * bsz));
 
+  std::string savePath = "OUTPUT_TRF.arr";
+  const char* savePathChar = savePath.c_str();
+  
   q = q / std::sqrt(float(headDim));
 
   auto arr = query.array();

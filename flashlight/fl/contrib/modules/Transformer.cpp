@@ -60,8 +60,7 @@ Transformer::Transformer(
   add(wf_);
   add(norm1_);
   add(norm2_);
-  std::string savePath = "OUTPUT_TRF.arr";
-  const char* savePathChar = savePath.c_str();
+  
 }
 
 Variable Transformer::mlp(const Variable& input) {
@@ -79,10 +78,16 @@ Variable Transformer::getMask(int32_t n, bool cache) {
 }
 
 Variable Transformer::selfAttention(const std::vector<Variable>& input) {
-  auto arr = input.array();
-  af::saveArray("selfAttention_input", arr, savePathChar, true); 
+  std::string savePath = "OUTPUT_TRF.arr";
+  const char* savePathChar = savePath.c_str();
+
+  
   // previous step[optionally], input, padMask
   auto encoderInput = input.at(input.size() - 2);
+
+  auto arr = encoderInput.array();
+  af::saveArray("selfAttention_input", arr, savePathChar, true); 
+
   // in case of previous state input[0] has size CxT_prevxB
   int n = input[0].dims(1), bsz = input[0].dims(2);
   double pDrop = train_ ? pDropout_ : 0.0;
@@ -137,6 +142,9 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
 }
 
 std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
+  std::string savePath = "OUTPUT_TRF.arr";
+  const char* savePathChar = savePath.c_str();
+
   // previous step[optionally], input, padMask
   // padMask should be empty if previous step is provided
   // padMask is expected to have "1" on the used positions and "0" on padded
@@ -159,8 +167,6 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
   auto input_arr = x.array();
   af::saveArray("layer_x", input_arr, savePathChar, true); 
 
-  input_arr = input.array();
-  af::saveArray("layer_input", input, savePathChar, true); 
 
 
   if (preLN_) {
