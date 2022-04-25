@@ -142,6 +142,9 @@ Variable Transformer::selfAttention(const std::vector<Variable>& input) {
 
   result = (*wf_)(transpose(result));
 
+  arr = wf_.array();
+  af::saveArray("selfAttention_wf_", arr, savePathChar, true); 
+
   arr = result.array();
   af::saveArray("selfAttention_result_2", arr, savePathChar, true); 
 
@@ -184,10 +187,24 @@ std::vector<Variable> Transformer::forward(const std::vector<Variable>& input) {
 
     return {f * (*norm2_)(mlp(h)).as(h.type()) + h};
   } else {
-    auto h = (*norm1_)((f * selfAttention(input)).as(x.type()) + x);
+    // f is used for dropout; it's not some parameter...
+    auto selfAttnResult = selfAttention(input))
 
+    input_arr = selfAttnResult.array();
+    af::saveArray("layer_selfAttnResult", selfAttnResult, savePathChar, true);
+
+    input_arr = norm1_.params[0].array();
+    af::saveArray("layer_norm1_w", input_arr, savePathChar, true); 
+    input_arr = norm1_.params[1].array();
+    af::saveArray("layer_norm1_b", input_arr, savePathChar, true); 
+
+    auto h = (*norm1_)((f * selfAttnResult.as(x.type()) + x);
+
+    
     input_arr = h.array();
     af::saveArray("layer_h", input_arr, savePathChar, true); 
+
+    
 
     h = (*norm2_)((f * mlp(h)).as(h.type()) + h)
 
