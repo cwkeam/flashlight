@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(flashlight LANGUAGES CXX C VERSION 0.3)
+project(flashlight LANGUAGES CXX C VERSION 0.3.2)
 
 include(CTest)
 include(CMakeDependentOption)
@@ -52,11 +52,6 @@ option(FL_BUILD_EXPERIMENTAL "Build internal experimental components" OFF)
 option(FL_BUILD_SCRIPTS "Build internal scripts for wav2letter++" OFF)
 option(FL_BUILD_RECIPES "Build recipes" ON)
 option(FL_BUILD_STANDALONE "Build standalone installation" ON)
-option(FL_BUILD_LIBRARIES "Build flashlight libraries" ON)
-option(FL_BUILD_CORE "Build flashlight core" ON)
-cmake_dependent_option(FL_BUILD_CONTRIB
-  "Build and link additional flashlight contrib assets." ON
-  "FL_BUILD_CORE" OFF)
 
 # Flashlight backend
 set(FL_BACKEND "CUDA" CACHE STRING "Backend with which to build flashlight")
@@ -84,7 +79,7 @@ cmake_dependent_option(FL_BUILD_PROFILING
   "FL_USE_CUDA" OFF)
 
 # List of installable targets
-set(INSTALLABLE_TARGETS "")
+set(INSTALLABLE_TARGETS)
 
 set(FL_ROOT_DIR ${PROJECT_SOURCE_DIR}/flashlight)
 set(FL_BUILD_BINARY_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/bin")
@@ -113,41 +108,37 @@ if (FL_BUILD_TESTS)
   include(TestUtils)
 endif ()
 
-find_package(cereal)
-find_package(ArrayFire)
-
-
 # ------------------------ flashlight Libraries ------------------------
-# FIXME: libraries are required to build core tests - https://git.io/JL955
-if (FL_BUILD_LIBRARIES OR (FL_BUILD_CORE AND FL_BUILD_TESTS))
-  
 
-  message(STATUS "Will build flashlight libraries.")
+option(FL_LIBRARIES_USE_CUDA "Use CUDA in flashlight libraries build" ON)
+option(FL_LIBRARIES_USE_KENLM "Use KenLM in flashlight libraries build" ON)
+option(FL_LIBRARIES_USE_MKL "Use MKL in flashlight libraries build" ON)
+option(FL_LIBRARIES_BUILD_FOR_PYTHON "Build Python bindings" OFF)
 
-  option(FL_LIBRARIES_USE_CUDA "Use CUDA in flashlight libraries build" ON)
-  option(FL_LIBRARIES_USE_KENLM "Use KenLM in flashlight libraries build" ON)
-  option(FL_LIBRARIES_USE_MKL "Use MKL in flashlight libraries build" ON)
-  option(FL_LIBRARIES_BUILD_FOR_PYTHON "Build Python bindings" OFF)
+set(FL_COMPILE_DEFINITIONS
+  $<$<BOOL:${FL_LIBRARIES_USE_CUDA}>:FL_LIBRARIES_USE_CUDA>
+  $<$<BOOL:${FL_LIBRARIES_USE_MKL}>:FL_LIBRARIES_USE_MKL>
+  $<$<BOOL:${FL_LIBRARIES_USE_KENLM}>:FL_LIBRARIES_USE_KENLM>
+  )
 
-  set(FL_COMPILE_DEFINITIONS
-    $<$<BOOL:${FL_LIBRARIES_USE_CUDA}>:FL_LIBRARIES_USE_CUDA>
-    $<$<BOOL:${FL_LIBRARIES_USE_MKL}>:FL_LIBRARIES_USE_MKL>
-    $<$<BOOL:${FL_LIBRARIES_USE_KENLM}>:FL_LIBRARIES_USE_KENLM>
-    )
+set(FL_LIB_DIR "${FL_ROOT_DIR}/lib")
+include(${FL_LIB_DIR}/CMakeLists.txt)
 
-  set(FL_LIB_DIR "${FL_ROOT_DIR}/lib")
-  include(${FL_LIB_DIR}/CMakeLists.txt)
+if (FL_LIBRARIES_BUILD_FOR_PYTHON)
+  set(FL_BINDING_PYTHON "${PROJECT_SOURCE_DIR}/bindings/python")
+  include(${FL_BINDING_PYTHON}/CMakeLists.txt)
+endif ()
 
-  if (FL_LIBRARIES_BUILD_FOR_PYTHON)
-    set(FL_BINDING_PYTHON "${PROJECT_SOURCE_DIR}/bindings/python")
-    include(${FL_BINDING_PYTHON}/CMakeLists.txt)
-  endif ()
+setup_install_headers(${FL_LIB_DIR} ${FL_INSTALL_INC_DIR_HEADER_LOC})
 
-  setup_install_headers(${FL_LIB_DIR} ${FL_INSTALL_INC_DIR_HEADER_LOC})
-  if (FL_CODE_COVERAGE)
-    add_coverage_to_target(TARGET fl-libraries)
-  endif()
-endif() # if FL_BUILD_LIBRARIES
+# --------------------------- Core Options  ---------------------------
+
+option(FL_BUILD_CORE "Build flashlight core" ON)
+
+fl_dependent_option(
+  FL_BUILD_CONTRIB
+  "Build and link additional flashlight contrib assets."
+  ON "FL_BUILD_CORE" OFF)
 
 # --------------------------- flashlight ---------------------------
 if (FL_BUILD_CORE)
@@ -161,11 +152,6 @@ if (FL_BUILD_CORE)
     PROPERTIES
     LINKER_LANGUAGE CXX
     )
-
-  # FIXME: libraries are required to build core tests - https://git.io/JL955
-  if (FL_BUILD_LIBRARIES OR (FL_BUILD_CORE AND FL_BUILD_TESTS))
-    target_link_libraries(flashlight PUBLIC fl-libraries)
-  endif()
 
   if (FL_CODE_COVERAGE)
     add_coverage_to_target(TARGET flashlight)
@@ -229,7 +215,7 @@ if (FL_BUILD_CORE)
   # ------------------------ flashlight Core ------------------------
   set(FL_CORE_DIR "${FL_ROOT_DIR}/fl")
   include(${FL_CORE_DIR}/CMakeLists.txt)
-  set(INSTALLABLE_TARGETS ${INSTALLABLE_TARGETS} flashlight)
+  list(APPEND INSTALLABLE_TARGETS flashlight)
   # flashlight core components keep their relative paths with respect to project
   setup_install_headers(${FL_CORE_DIR} ${FL_INSTALL_INC_DIR_HEADER_LOC})
   target_compile_definitions(flashlight
@@ -240,16 +226,13 @@ if (FL_BUILD_CORE)
     FL_BUILD_PROFILING=$<BOOL:${FL_BUILD_PROFILING}>
     )
 
-  # ------------------------ Extensions ------------------------
-  set(FL_EXT_DIR "${FL_ROOT_DIR}/ext")
-  include(${FL_EXT_DIR}/CMakeLists.txt)
-
-  # Make #include "flashlight/lib" work by adding to the inner incl dir
-  setup_install_headers(${FL_EXT_DIR} ${FL_INSTALL_INC_DIR_HEADER_LOC})
 endif() # if FL_BUILD_CORE
 
-# --------------------------- Apps ---------------------------
+# --------------------------- Pkgs  ---------------------------
+set(FL_PKG_DIR "${FL_ROOT_DIR}/pkg")
+include(${FL_PKG_DIR}/CMakeLists.txt)
 
+# --------------------------- Apps Options  ---------------------------
 set(FL_APPS_DIR "${FL_ROOT_DIR}/app")
 include(${FL_APPS_DIR}/CMakeLists.txt)
 
