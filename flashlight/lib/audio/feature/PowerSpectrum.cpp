@@ -10,6 +10,7 @@
 #include <fftw3.h>
 
 #include <fstream>
+#include <iostream>
 
 #include <algorithm>
 #include <cstddef>

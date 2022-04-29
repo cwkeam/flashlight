@@ -135,10 +135,7 @@ setup_install_headers(${FL_LIB_DIR} ${FL_INSTALL_INC_DIR_HEADER_LOC})
 
 option(FL_BUILD_CORE "Build flashlight core" ON)
 
-fl_dependent_option(
-  FL_BUILD_CONTRIB
-  "Build and link additional flashlight contrib assets."
-  ON "FL_BUILD_CORE" OFF)
+
 
 # --------------------------- flashlight ---------------------------
 if (FL_BUILD_CORE)
@@ -229,8 +226,7 @@ if (FL_BUILD_CORE)
 endif() # if FL_BUILD_CORE
 
 # --------------------------- Pkgs  ---------------------------
-set(FL_PKG_DIR "${FL_ROOT_DIR}/pkg")
-include(${FL_PKG_DIR}/CMakeLists.txt)
+
 
 # --------------------------- Apps Options  ---------------------------
 set(FL_APPS_DIR "${FL_ROOT_DIR}/app")
