@@ -9,6 +9,8 @@
 
 #include <fftw3.h>
 
+#include <fstream>
+
 #include <algorithm>
 #include <cstddef>
 #include <unordered_map>
@@ -41,15 +43,35 @@ std::vector<float> PowerSpectrum::apply(const std::vector<float>& input) {
 }
 
 std::vector<float> PowerSpectrum::powSpectrumImpl(std::vector<float>& frames) {
+  std::fstream file;
+  file.open("powSpectrum_OUT.txt", std::ios_base::out);
+
+  // 1. pow input
+  for(int i=0;i<frames.size();i++)
+  {
+      file<<frames[i]<<std::endl;
+  }
+  file << std::endl;
+
+
   int nSamples = featParams_.numFrameSizeSamples();
   int nFrames = frames.size() / nSamples;
   int nFft = featParams_.nFft();
   int K = featParams_.filterFreqResponseLen();
 
+  std::cout << "nSamples" << nSamples;
+  std::cout << "nFrames" << nFrames;
+  std::cout << "nFft" << nFft;
+  std::cout << "K" << K;
+
+
   if (featParams_.ditherVal != 0.0) {
+    std::cout << "DITHER RAN";
     frames = dither_.apply(frames);
   }
   if (featParams_.zeroMeanFrame) {
+    std::cout << "ZERO RAN";
+
     for (size_t f = 0; f < nFrames; ++f) {
       auto begin = frames.data() + f * nSamples;
       float mean = std::accumulate(begin, begin + nSamples, 0.0);
@@ -59,9 +81,20 @@ std::vector<float> PowerSpectrum::powSpectrumImpl(std::vector<float>& frames) {
     }
   }
   if (featParams_.preemCoef != 0) {
+    std::cout << "PREEM RAN";
     preEmphasis_.applyInPlace(frames);
   }
+  
   windowing_.applyInPlace(frames);
+
+  // 2. after windowing
+  for(int i=0;i<frames.size();i++)
+  {
+      file<<frames[i]<<std::endl;
+  }
+  file << std::endl;
+
+
   std::vector<float> dft(K * nFrames);
   for (size_t f = 0; f < nFrames; ++f) {
     auto begin = frames.data() + f * nSamples;
@@ -83,7 +116,27 @@ std::vector<float> PowerSpectrum::powSpectrumImpl(std::vector<float>& frames) {
             outFftBuf_[2 * i + 1] * outFftBuf_[2 * i + 1]);
       }
     }
+
+    // 3. print dft
+    for(int i=0;i<dft.size();i++)
+    {
+        file<<dft[i]<<std::endl;
+    }
+    file << std::endl;
+
+
   }
+
+  file.close();
+
+  // 4. print dft
+  for(int i=0;i<dft.size();i++)
+  {
+      file<<dft[i]<<std::endl;
+  }
+  file << std::endl;
+
+
   return dft;
 }
 
