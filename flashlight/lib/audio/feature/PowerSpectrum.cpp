@@ -83,12 +83,23 @@ std::vector<float> PowerSpectrum::powSpectrumImpl(std::vector<float>& frames) {
   }
   if (featParams_.preemCoef != 0) {
     std::cout << "PREEM RAN";
+    std::cout << featParams_.preemCoef;
     preEmphasis_.applyInPlace(frames);
   }
+
+
+  // 2. after preEmphasis
+  for(int i=0;i<frames.size();i++)
+  {
+      file<<frames[i]<<std::endl;
+  }
+  file << std::endl;
+
+
   
   windowing_.applyInPlace(frames);
 
-  // 2. after windowing
+  // 3. after windowing
   for(int i=0;i<frames.size();i++)
   {
       file<<frames[i]<<std::endl;
